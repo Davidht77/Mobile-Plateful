@@ -1,5 +1,15 @@
 {
   "expo": {
+    "scheme": "acme",
+    "plugins": [
+      "expo-router"
+    ],
+    "name": "tabs-app",
+    "slug": "tabs-app"
+  }
+}
+{
+  "expo": {
     "name": "plateful-app",
     "slug": "plateful-app",
     "version": "1.0.0",
