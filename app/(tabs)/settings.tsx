@@ -52,7 +52,7 @@ const Settings = () => {
     });
 
     if (!image.canceled) {
-      setPickedImage(image.assets[0].uri);
+      setProfileImage(image.assets[0].uri);
       console.log(image.assets[0].uri);
     }
   }
@@ -70,7 +70,6 @@ const Settings = () => {
   return (
     <View style={styles.container}>
       <View style={styles.profileContainer}>
-        {/* Mostrar la foto de perfil */}
         <Avatar.Image
           size={100}
           source={{ uri: profileImage || '../../assets/images/ftppordefectopng.png' }}
