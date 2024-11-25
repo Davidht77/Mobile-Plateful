@@ -1,19 +1,47 @@
 
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Alert} from 'react-native';
+import { View, Text, StyleSheet, Alert, Image} from 'react-native';
 import { TextInput, Avatar, IconButton, Button } from 'react-native-paper';
-import { launchImageLibrary } from 'react-native-image-picker'; 
 import { useAuthContext } from '../../contexts/AuthContext'; 
-import { useNavigation } from '@react-navigation/native'; // Para la navegación
 import { router } from 'expo-router';
-import { launchImageLibraryAsync, MediaTypeOptions } from 'expo-image-picker';
+import {
+  launchCameraAsync,
+  useCameraPermissions,
+  PermissionStatus,
+  launchImageLibraryAsync,
+  MediaTypeOptions,
+} from "expo-image-picker";
 
 const Settings = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [profileImage, setProfileImage] = useState<string | undefined>(undefined);
   const { logout } = useAuthContext(); // Asume que tienes un método de logout en tu contexto
-  const navigation = useNavigation();
+
+  function ImagePicker({ onImageChange }) {
+    const [pickedImage, setPickedImage] = useState();
+  
+    const [cameraPermissionInformation, requestPermission] =
+      useCameraPermissions();
+  
+    async function verifyPermissions() {
+      if (cameraPermissionInformation.status === PermissionStatus.UNDETERMINED) {
+        const permissionResponse = await requestPermission();
+  
+        return permissionResponse.granted;
+      }
+  
+      if (cameraPermissionInformation.status === PermissionStatus.DENIED) {
+        Alert.alert(
+          "Insufficient Permissions!",
+          "You need to grant camera permissions to use this app."
+        );
+        return false;
+      }
+  
+      return true;
+    }
+  }
 
   async function selectImageHandler() {
     let image = await launchImageLibraryAsync({
