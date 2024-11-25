@@ -22,7 +22,7 @@ export default function AuthContainer(props: AuthContainerProps) {
 			}}
 		>
 			<Image
-				source={require("../assets/images/favicon.png")}
+				source={require("../assets/images/_593fd117-ce1f-4fd5-919e-9da2321a4f86.jpeg")}
 				style={{
 					width: 100,
 					height: 100,
