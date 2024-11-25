@@ -15,6 +15,7 @@ export async function signup(signupRequest: RegisterRequest) {
 			signupRequest,
 			options
 		);
+		console.log(response.data.role);
 		return response.data;
 	} catch (error) {
 		throw error;

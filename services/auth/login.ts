@@ -19,6 +19,7 @@ export async function login(loginRequest: LoginRequest) {
 			options
 		);
 		api.authorization = response.data.token;
+		console.log(response.data.role);
 		return response.data;
 	} catch (error) {
 		throw error;
