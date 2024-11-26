@@ -72,7 +72,7 @@ const Settings = () => {
       <View style={styles.profileContainer}>
         <Avatar.Image
           size={100}
-          source={{ uri: profileImage || '../../assets/images/ftppordefectopng.png' }}
+          source={{ uri: profileImage }}
         />
         <IconButton
           icon="camera"
@@ -89,7 +89,7 @@ const Settings = () => {
         style={styles.input}
       />
       <TextInput
-        label="Correo"
+        label="Celular"
         value={email}
         onChangeText={setEmail}
         keyboardType="email-address"
@@ -129,7 +129,4 @@ const styles = StyleSheet.create({
 });
 
 export default Settings;
-function setPickedImage(uri: string) {
-    throw new Error('Function not implemented.');
-}
 

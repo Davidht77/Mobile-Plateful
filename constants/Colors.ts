@@ -1,3 +1,20 @@
+import { DefaultTheme } from 'react-native-paper';
+
+const CustomTheme = {
+    ...DefaultTheme,
+    colors: {
+        ...DefaultTheme.colors,
+        primary: '#e86a10', // Cambia este color a tu preferencia
+        background: '#f5f5f5',
+        surface: '#ffffff',
+        accent: '#03dac4',
+        text: '#000000',
+    },
+};
+
+export default CustomTheme;
+
+
 export const COLORS = {
 	desertSand: "#E4BE9E",
 	honeyDew: "#D0E1D4",

@@ -20,7 +20,7 @@ export default () => {
               // Retorna el ícono correspondiente
               return <Ionicons name={iconName} size={size} color={color} />;
             },
-            tabBarActiveTintColor: "#6750a4", // Color del ícono activo
+            tabBarActiveTintColor: "#e86a10", // Color del ícono activo
             tabBarInactiveTintColor: "gray", // Color del ícono inactivo
           })}
         >
