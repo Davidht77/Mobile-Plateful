@@ -3,8 +3,9 @@ import axios, {
 	AxiosResponse,
 	RawAxiosRequestHeaders,
 } from "axios";
+import { ubicationResquest } from "../interfaces/ubication/UbicationRequest";
 
-const BACKEND_URL = "http://192.168.0.5:8080";
+const BACKEND_URL = "http://44.192.120.217:8080";
 
 
 export default class Api {
@@ -53,7 +54,7 @@ export default class Api {
 		);
 	}
 
-	public get<RequestBodyType, ResponseBodyType>(options: AxiosRequestConfig) {
+	public get<RequestBodyType, ResponseBodyType>(ubication: ubicationResquest, options: AxiosRequestConfig) {
 		const configOptions: AxiosRequestConfig = {
 			...options,
 			method: "GET",

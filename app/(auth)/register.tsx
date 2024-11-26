@@ -92,14 +92,14 @@ export default function Signup() {
           			value={inputDate}
           			onChange={(d) => {setInputDate(d);}}
           			inputMode="start"
-          			style={{marginTop: 35, marginBottom: 5, height: 50}}
+          			style={{marginTop: 35, marginBottom: 5, height: 50, color: '#e86a10'}}
           			mode="outlined"
 				/>
 				<View style={{ marginTop: 35 }}>
 					<Button
 						title={`Cambiar a ${category === "CLIENTE" ? "PROPIETARIO" : "CLIENTE"}`}
 						onPress={() => setCategory(category === "CLIENTE" ? "PROPIETARIO" : "CLIENTE")}
-						color="#6750a4"
+						color="#e86a10"
 					/>
 					<Text style={{ marginTop: 10 }}>
 						<Text>Rol seleccionado:</Text>
