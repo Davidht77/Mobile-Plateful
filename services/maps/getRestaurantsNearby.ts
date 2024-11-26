@@ -15,7 +15,7 @@ export async function getUbicationNearby(ubication: ubicationResquest) {
 	};
 
 	try {
-		const response = await api.get<null,RestauranteResponse[]>(
+		const response = await api.get<ubicationResquest,RestauranteResponse[]>(
 			ubication,
 			options
 		);

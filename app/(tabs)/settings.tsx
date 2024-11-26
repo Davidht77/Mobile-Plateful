@@ -11,6 +11,7 @@ import {
   launchImageLibraryAsync,
   MediaTypeOptions,
 } from "expo-image-picker";
+import ImagePicker from '../../components/ImagePicker';
 
 const Settings = () => {
   const [name, setName] = useState('');
@@ -18,29 +19,8 @@ const Settings = () => {
   const [profileImage, setProfileImage] = useState<string | undefined>(undefined);
   const { logout } = useAuthContext(); // Asume que tienes un método de logout en tu contexto
 
-  function ImagePicker({ onImageChange }) {
-    const [pickedImage, setPickedImage] = useState();
-  
-    const [cameraPermissionInformation, requestPermission] =
-      useCameraPermissions();
-  
-    async function verifyPermissions() {
-      if (cameraPermissionInformation.status === PermissionStatus.UNDETERMINED) {
-        const permissionResponse = await requestPermission();
-  
-        return permissionResponse.granted;
-      }
-  
-      if (cameraPermissionInformation.status === PermissionStatus.DENIED) {
-        Alert.alert(
-          "Insufficient Permissions!",
-          "You need to grant camera permissions to use this app."
-        );
-        return false;
-      }
-  
-      return true;
-    }
+  function imageHandler(imageUri) {
+    setProfileImage(imageUri);
   }
 
   async function selectImageHandler() {
@@ -58,7 +38,6 @@ const Settings = () => {
   }
 
   const handleSaveChanges = () => {
-    // Aquí puedes hacer la lógica para guardar los cambios del usuario
     Alert.alert('Cambios guardados', 'Tus datos han sido actualizados correctamente');
   };
 
@@ -81,7 +60,7 @@ const Settings = () => {
           style={styles.cameraButton}
         />
       </View>
-
+      <ImagePicker onImageChange={imageHandler} />
       <TextInput
         label="Nombre"
         value={name}

@@ -54,7 +54,7 @@ export default class Api {
 		);
 	}
 
-	public get<RequestBodyType, ResponseBodyType>(ubication: ubicationResquest, options: AxiosRequestConfig) {
+	public get<RequestBodyType, ResponseBodyType>(data: RequestBodyType, options: AxiosRequestConfig) {
 		const configOptions: AxiosRequestConfig = {
 			...options,
 			method: "GET",

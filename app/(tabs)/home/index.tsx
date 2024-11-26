@@ -7,6 +7,7 @@ import {
   Button,
   TextInput,
 } from "react-native";
+import { Text } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location";
 import { getUbication } from "../../../services/maps/getUbication";
@@ -51,21 +52,21 @@ export default function UserLocationMap() {
       Alert.alert("Error", "Por favor, escribe una ubicación válida.");
       return;
     }
-    
+
     try {
-        const response = await getUbication(search)
+      const response = await getUbication(search);
+      console.log(search);
+      setLocation({
+        latitude: response.latitud,
+        longitude: response.longitud,
+        latitudeDelta: 0.01,
+        longitudeDelta: 0.01,
+      });
 
-        setLocation({
-            latitude: response.latitud,
-            longitude: response.longitud,
-            latitudeDelta: 0.01,
-            longitudeDelta: 0.01,
-          });
-      
-          Alert.alert("Éxito", `Ubicación seleccionada: ${search}`);
+      Alert.alert("Éxito", `Ubicación seleccionada: ${search}`);
+    } catch (e) {
+      Alert.alert("Error", `Error al obtener la ubicación de: ${search}`);
     }
-    catch(e){Alert.alert("Error", `Error al obtener la ubicacion de: ${search}`);}
-
   };
 
   if (loading) {
@@ -75,36 +76,40 @@ export default function UserLocationMap() {
       </View>
     );
   }
+
+  if (!location) {
+    return (
+      <View style={styles.container}>
+        <Text>Esperando ubicación...</Text>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
-      {location ? (
-        <MapView
-          style={styles.map}
-          initialRegion={location}
-        >
-          <Marker
-            coordinate={{
-              latitude: location.latitude,
-              longitude: location.longitude,
-            }}
-            title="Estás aquí"
-            description="Ubicación seleccionada"
-          />
-        </MapView>
-      ) : (
-        <View style={styles.retryContainer}>
-          <TextInput
-            style={styles.input}
-            placeholder="Escribe una ubicación..."
-            placeholderTextColor="#bbb"
-            value={search}
-            onChangeText={setSearch}
-          />
-          <Button title="Buscar ubicación" onPress={handleManualSearch} />
+      <MapView style={styles.map} region={location}>
+        <Marker
+          coordinate={{
+            latitude: location.latitude,
+            longitude: location.longitude,
+          }}
+          title="Estás aquí"
+          description="Ubicación seleccionada"
+        />
+      </MapView>
+      <View style={styles.retryContainer}>
+        <TextInput
+          style={styles.input}
+          placeholder="Escribe una ubicación..."
+          placeholderTextColor="#bbb"
+          value={search}
+          onChangeText={setSearch}
+        />
+          <View style={styles.buttonContainer}>
+            <Button title="Buscar ubicación" onPress={handleManualSearch} color='#e86a10'/>
+            <Button title="Reintentar GPS" onPress={getUserLocation} color='#e86a10'/>
+          </View>      
         </View>
-      )}
-
-      <Button title="Reintentar ubicación GPS" onPress={getUserLocation} />
     </View>
   );
 }
@@ -115,7 +120,7 @@ const styles = StyleSheet.create({
   },
   map: {
     width: "100%",
-    height: "90%",
+    height: "80%",
   },
   retryContainer: {
     flex: 1,
@@ -130,5 +135,11 @@ const styles = StyleSheet.create({
     borderColor: "#ccc",
     borderRadius: 5,
     marginBottom: 10,
+  },
+  buttonContainer: {
+    flexDirection: "row", 
+    justifyContent: "space-between", 
+    width: "100%", 
+    marginTop: 0,
   },
 });
