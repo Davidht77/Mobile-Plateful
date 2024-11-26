@@ -47,6 +47,10 @@ const RestaurantsPage = () => {
     }
   };
 
+  const handleShowRestaurant = () => {
+    return 1;
+  }
+
   return (
     <View style={styles.container}>
       <FlatList
@@ -54,7 +58,7 @@ const RestaurantsPage = () => {
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
           <View style={styles.restaurant}>
-            <Text>{item.name}</Text>
+            <Text onPress={handleShowRestaurant}>{item.name}</Text>
             <Text>{item.address}</Text>
           </View>
         )}
