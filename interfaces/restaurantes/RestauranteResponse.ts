@@ -2,9 +2,10 @@ import { Double } from "react-native/Libraries/Types/CodegenTypes";
 import { ubicationResponse } from "../ubication/UbicationResponse";
 
 export interface RestauranteResponse{
-    nombre_restaurante: String ;
-    horario: String ;
-    tipoRestaurante: String ;
-    calificacion_promedio: Double ;
+    id: number;
+    nombre_restaurante: string ;
+    horario: string ;
+    tipoRestaurante: string ;
+    calificacion_promedio: number ;
     ubicacion: ubicationResponse ;
 }

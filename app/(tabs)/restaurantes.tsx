@@ -4,10 +4,13 @@ import * as Location from "expo-location";
 import { getUbication } from '../../services/maps/getUbication';
 import { getUbicationNearby } from '../../services/maps/getRestaurantsNearby';
 import { useStorageState } from '../../hooks/useStorageState';
+import { ubicationResquest } from '../../interfaces/ubication/UbicationRequest';
+import { RestauranteResponse } from '../../interfaces/restaurantes/RestauranteResponse';
+import { Link, Redirect } from 'expo-router';
 
 const RestaurantsPage = () => {
-  const [location, setLocation] = useState(null);
-  const [restaurants, setRestaurants] = useState([]);
+  const [location, setLocation] = useState<ubicationResquest>(null);
+  const [restaurants, setRestaurants] = useState<RestauranteResponse[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [restaurantsPerPage] = useState(10);  // Número de restaurantes por página
 
@@ -16,8 +19,8 @@ const RestaurantsPage = () => {
       try {
         const userLocation = await Location.getCurrentPositionAsync({});
         setLocation({
-        latitude: userLocation.coords.latitude,
-        longitude: userLocation.coords.longitude,
+        latitud: userLocation.coords.latitude,
+        longitud: userLocation.coords.longitude,
         });
         const data = await getUbicationNearby(location);
         setRestaurants(data);
@@ -47,10 +50,6 @@ const RestaurantsPage = () => {
     }
   };
 
-  const handleShowRestaurant = () => {
-    return 1;
-  }
-
   return (
     <View style={styles.container}>
       <FlatList
@@ -58,8 +57,8 @@ const RestaurantsPage = () => {
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
           <View style={styles.restaurant}>
-            <Text onPress={handleShowRestaurant}>{item.name}</Text>
-            <Text>{item.address}</Text>
+            <Link href={`/resturante/${item.id}`}>{item.nombre_restaurante}</Link>
+            <Text>{item.ubicacion.direccionCompleta}</Text>
           </View>
         )}
       />
