@@ -8,17 +8,22 @@ export async function getUbicationNearby(ubication: ubicationResquest) {
 	const api = await Api.getInstance();
     const token = await SecureStore.getItemAsync("session");
 	const options: AxiosRequestConfig = {
-		url: "/restaurantes",
-        headers: {
-            Authorization: `Bearer ${token}`,
-          },
-	};
+		url: "/restaurantes/nearby2",
+		method: "GET",
+		headers: {
+		  Authorization: `Bearer ${token}`,
+		},
+		params: {
+		  latitud: -12.1352054,
+		  longitud: -77.0221411
+		},
+	  };
 
 	try {
-		const response = await api.get<ubicationResquest,RestauranteResponse[]>(
-			ubication,
+		const response = await api.request<null,RestauranteResponse[]>(
 			options
 		);
+		console.log(response.data);
 		return response.data;
 	} catch (error) {
 		throw error;

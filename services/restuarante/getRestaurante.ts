@@ -5,6 +5,7 @@ import { ubicationResponse } from "../../interfaces/ubication/UbicationResponse"
 import { ubicationResquest } from "../../interfaces/ubication/UbicationRequest";
 import { RestauranteResponse } from "../../interfaces/restaurantes/RestauranteResponse";
 import { useStorageState } from "../../hooks/useStorageState";
+import { RestauranteDTO } from "../../interfaces/restaurantes/RestauranteDto";
 
 export async function getRestauranteById(id: number) {
 	const api = await Api.getInstance();
@@ -14,12 +15,11 @@ export async function getRestauranteById(id: number) {
 		url: `/restaurantes/${id}`,
         headers: {
             Authorization: `Bearer ${token}`,
-          },
+          }
 	};
 
 	try {
-		const response = await api.post<number,RestauranteResponse>(
-			id,
+		const response = await api.get<null,RestauranteDTO>(
 			options
 		);
 		return response.data;
