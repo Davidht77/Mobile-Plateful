@@ -4,7 +4,11 @@
     "plugins": [
       "expo-router"
     ],
+    "userInterfaceStyle": "automatic",
     "name": "tabs-app",
-    "slug": "tabs-app"
+    "slug": "tabs-app",
+    "web": {
+      "bundler": "metro"
+    }
   }
 }
