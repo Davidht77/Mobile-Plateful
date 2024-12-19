@@ -2,6 +2,7 @@ import { Stack } from "expo-router"
 import {Provider as PaperProvider } from 'react-native-paper';
 import { AuthProvider } from "../contexts/AuthContext";
 import CustomTheme from "../constants/Colors";
+import "../tailwind.css";
 
 const StackLayout = () =>{
     return(

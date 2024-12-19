@@ -56,7 +56,7 @@ const RestaurantsPage = () => {
         data={paginateRestaurants()}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
-          <View style={styles.restaurant}>
+          <View style={styles.restaurant} className='bg-orange-400'>
             <Link href={`/resturante/${item.id}`}>{item.nombre_restaurante}</Link>
             <Text>{item.ubicacion.direccionCompleta}</Text>
           </View>
@@ -87,7 +87,6 @@ const styles = StyleSheet.create({
   restaurant: {
     marginBottom: 10,
     padding: 10,
-    backgroundColor: '#f9f9f9',
   },
   pagination: {
     flexDirection: 'row',
