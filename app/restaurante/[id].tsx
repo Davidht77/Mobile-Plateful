@@ -4,7 +4,8 @@ import { useCallback, useEffect, useState } from "react";
 import { View, Text, BackHandler, TouchableOpacity } from "react-native";
 import { getRestauranteById } from "../../services/restaurante/getRestaurante";
 import { RestauranteDTO } from "../../interfaces/restaurantes/RestauranteDto";
-import { validatePathConfig } from "expo-router/build/fork/getPathFromState-forks";
+import MapView, { Marker } from "react-native-maps";
+
 
 const DetailsPage = () =>{
     const vacio : RestauranteDTO = {
@@ -27,6 +28,8 @@ const DetailsPage = () =>{
     const [restaurante,setRestaurante] = useState<RestauranteDTO>(vacio);
     const id = searchParams.get("id"); // Accede al valor del parámetro 'id'
     const router = useRouter(); // Hook para manejar rutas
+    const roundedLatitude = parseFloat(restaurante.longitude.toFixed(6));
+    const roundedLongitude = parseFloat(restaurante.latitude.toFixed(6));
 
     const ObtenerRestaurante = async() =>{
         const response = await getRestauranteById(Number(id))
@@ -53,7 +56,12 @@ const DetailsPage = () =>{
 
     useEffect(()=>{
         ObtenerRestaurante();
+        console.log(roundedLongitude); // -77.022141
+        console.log(roundedLatitude);  // -12.135205
     },[])
+
+    const isValidCoordinates =
+    roundedLatitude !== 0 && roundedLongitude !== 0;
         
     return (
       <View className="flex-1 bg-white p-6">
@@ -62,31 +70,65 @@ const DetailsPage = () =>{
         <Text className="text-4xl font-bold text-gray-800 text-center mb-6">
           {restaurante.nombre_restaurante}
         </Text>
-  
-        <View className="mb-4">
+      <View className="flex-row justify-between mb-1">
+        <View className="flex-1 mr-2">
           <Text className="text-sm font-medium text-gray-500">Dueño:</Text>
           <Text className="text-lg text-gray-700">{restaurante.nombre_propietario}</Text>
-        </View>
-  
-        <View className="mb-4">
+
           <Text className="text-sm font-medium text-gray-500">Horario:</Text>
           <Text className="text-lg text-gray-700">{restaurante.horario}</Text>
-        </View>
-  
-        <View className="mb-4">
-          <Text className="text-sm font-medium text-gray-500">Tipo de Restaurante:</Text>
-          <Text className="text-lg text-gray-700">{restaurante.tipoRestaurante}</Text>
-        </View>
-  
-        <View className="mb-4">
-          <Text className="text-sm font-medium text-gray-500">Calificación Promedio:</Text>
-          <Text className="text-lg text-gray-700">{restaurante.calificacion_promedio}</Text>
-        </View>
-  
-        <View className="mb-6">
+
           <Text className="text-sm font-medium text-gray-500">Carta:</Text>
           <Text className="text-lg text-gray-700">{restaurante.nombre_carta}</Text>
         </View>
+  
+        <View className="flex-1 ml-2">
+          <Text className="text-sm font-medium text-gray-500">Tipo de Restaurante:</Text>
+          <Text className="text-lg text-gray-700">{restaurante.tipoRestaurante}</Text>
+
+          <Text className="text-sm font-medium text-gray-500">Calificación Promedio:</Text>
+          <Text className="text-lg text-gray-700">{restaurante.calificacion_promedio}</Text>
+
+        </View>
+      </View>
+
+      {isValidCoordinates ? (
+        <MapView
+          style={{ height: 300, borderRadius: 10, marginBottom: 16 }}
+          provider="google"
+          initialRegion={{
+            latitude: roundedLatitude,
+            longitude: roundedLongitude,
+            latitudeDelta: 0.01,
+            longitudeDelta: 0.01,
+          }}
+          googleMapId="8ee6041ae9d57958"
+        >
+          <Marker
+            coordinate={{
+              latitude: roundedLatitude,
+              longitude: roundedLongitude,
+            }}
+            title={restaurante.nombre_restaurante}
+            description={`Ubicación de ${restaurante.nombre_restaurante}`}
+          />
+        </MapView>
+      ) : (
+        <View
+          style={{
+            height: 300,
+            borderRadius: 10,
+            marginBottom: 16,
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: "#f0f0f0",
+          }}
+        >
+          <Text className="text-gray-500">
+            Ubicación no disponible para este restaurante.
+          </Text>
+        </View>
+      )}
 
         <View className="flex-1 justify-end items-center">
         <TouchableOpacity

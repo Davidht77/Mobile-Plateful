@@ -58,7 +58,8 @@ const RestaurantsPage = () => {
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
           <View style={styles.restaurant} className='bg-orange-400 shadow-sm rounded-lg p-4 mb-3 mx-4 border border-gray-200'>
-            <Link href={`/restaurante/${item.id}`}>{item.nombre_restaurante}</Link>
+            <Link href={`/restaurante/${item.id}`} className='text-lg font-bold text-black'>{item.nombre_restaurante}</Link>
+            <Text className="text-lg">{item.tipoRestaurante}</Text>
             <Text>{item.ubicacion.direccionCompleta}</Text>
           </View>
         )}

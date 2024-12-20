@@ -8,7 +8,7 @@ export async function getUbicationNearby(ubication: ubicationResquest) {
 	const api = await Api.getInstance();
     const token = await SecureStore.getItemAsync("session");
 	const options: AxiosRequestConfig = {
-		url: "/restaurantes/nearby2",
+		url: "/restaurantes/nearby",
 		method: "GET",
 		headers: {
 		  Authorization: `Bearer ${token}`,
