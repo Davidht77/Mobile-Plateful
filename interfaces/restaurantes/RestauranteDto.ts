@@ -8,7 +8,7 @@ export interface RestauranteDTO {
     cartaId: number;
     nombre_carta: string;
     calificacion_promedio: number;
-    ubicacionId: number;
+    direccion: string;
     latitude: number;
     longitude: number;
   }

@@ -4,8 +4,8 @@ import {
   StyleSheet,
   Alert,
   ActivityIndicator,
-  Button,
   TextInput,
+  TouchableOpacity,
 } from "react-native";
 import { Text } from "react-native";
 import MapView, { Marker } from "react-native-maps";
@@ -14,25 +14,29 @@ import { getUbication } from "../../../services/maps/getUbication";
 
 export default function UserLocationMap() {
   const [location, setLocation] = useState(null); // Estado para la ubicación
-  const [loading, setLoading] = useState(true);   // Estado de carga
-  const [search, setSearch] = useState("");       // Estado para la búsqueda manual
+  const [loading, setLoading] = useState(true); // Estado de carga
+  const [search, setSearch] = useState(""); // Estado para la búsqueda manual
+  const [nombre_lugar, setLugar] = useState("");
 
-  // Pedir ubicación al cargar la app
   useEffect(() => {
     getUserLocation();
   }, []);
 
   const getUserLocation = async () => {
-    setLoading(true); // Activar indicador de carga
+    setLoading(true);
     try {
       const { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== "granted") {
-        Alert.alert("Permiso denegado", "Se necesita el permiso de ubicación para usar esta función.");
+        Alert.alert(
+          "Permiso denegado",
+          "Se necesita el permiso de ubicación para usar esta función."
+        );
         setLoading(false);
         return;
       }
 
       const userLocation = await Location.getCurrentPositionAsync({});
+      setLugar("Aquí te encuentras");
       setLocation({
         latitude: userLocation.coords.latitude,
         longitude: userLocation.coords.longitude,
@@ -40,13 +44,15 @@ export default function UserLocationMap() {
         longitudeDelta: 0.01,
       });
     } catch (error) {
-      Alert.alert("Error", "No se pudo obtener la ubicación del GPS. Inténtalo de nuevo o busca manualmente.");
+      Alert.alert(
+        "Error",
+        "No se pudo obtener la ubicación del GPS. Inténtalo de nuevo o busca manualmente."
+      );
     } finally {
       setLoading(false);
     }
   };
 
-  // Simulación de búsqueda de ubicación manual
   const handleManualSearch = async () => {
     if (search.trim() === "") {
       Alert.alert("Error", "Por favor, escribe una ubicación válida.");
@@ -55,15 +61,14 @@ export default function UserLocationMap() {
 
     try {
       const response = await getUbication(search);
-      console.log(search);
       setLocation({
         latitude: response.latitud,
         longitude: response.longitud,
         latitudeDelta: 0.01,
         longitudeDelta: 0.01,
       });
-
-      Alert.alert("Éxito", `Ubicación seleccionada: ${search}`);
+      Alert.alert("Éxito", `Ubicación seleccionada: ${response.direccionCompleta}`);
+      setLugar(response.direccionCompleta);
     } catch (e) {
       Alert.alert("Error", `Error al obtener la ubicación de: ${search}`);
     }
@@ -71,15 +76,15 @@ export default function UserLocationMap() {
 
   if (loading) {
     return (
-      <View style={styles.container}>
-        <ActivityIndicator size="large" color="#0000ff" />
+      <View style={styles.centerContainer}>
+        <ActivityIndicator size="large" color="#e86a10" />
       </View>
     );
   }
 
   if (!location) {
     return (
-      <View style={styles.container}>
+      <View style={styles.centerContainer}>
         <Text>Esperando ubicación...</Text>
       </View>
     );
@@ -87,17 +92,7 @@ export default function UserLocationMap() {
 
   return (
     <View style={styles.container}>
-      <MapView style={styles.map} region={location}>
-        <Marker
-          coordinate={{
-            latitude: location.latitude,
-            longitude: location.longitude,
-          }}
-          title="Estás aquí"
-          description="Ubicación seleccionada"
-        />
-      </MapView>
-      <View style={styles.retryContainer}>
+      <View style={styles.searchContainer}>
         <TextInput
           style={styles.input}
           placeholder="Escribe una ubicación..."
@@ -105,11 +100,30 @@ export default function UserLocationMap() {
           value={search}
           onChangeText={setSearch}
         />
-          <View style={styles.buttonContainer}>
-            <Button title="Buscar ubicación" onPress={handleManualSearch} color='#e86a10'/>
-            <Button title="Reintentar GPS" onPress={getUserLocation} color='#e86a10'/>
-          </View>      
-        </View>
+        <TouchableOpacity style={styles.searchButton} onPress={handleManualSearch}>
+          <Text style={styles.searchButtonText}>Buscar</Text>
+        </TouchableOpacity>
+      </View>
+      <MapView
+        style={styles.map}
+        region={location}
+        googleMapId="8ee6041ae9d57958"
+      >
+        <Marker
+          coordinate={{
+            latitude: location.latitude,
+            longitude: location.longitude,
+          }}
+          title="Tu Ubicación"
+          description={nombre_lugar}
+        />
+      </MapView>
+      <TouchableOpacity
+        style={styles.retryButton}
+        onPress={getUserLocation}
+      >
+        <Text style={styles.retryButtonText}>Reintentar GPS</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -117,29 +131,62 @@ export default function UserLocationMap() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#f5f5f5",
   },
-  map: {
-    width: "100%",
-    height: "80%",
-  },
-  retryContainer: {
+  centerContainer: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    padding: 20,
+  },
+  map: {
+    flex: 1,
+    marginTop: 10,
+    borderRadius: 10,
+  },
+  searchContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 10,
+    backgroundColor: "#fff",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    elevation: 2,
+    marginHorizontal: 10,
+    marginTop: 10,
+    borderRadius: 10,
   },
   input: {
-    width: "100%",
+    flex: 1,
     padding: 10,
-    borderWidth: 1,
-    borderColor: "#ccc",
+    backgroundColor: "#f5f5f5",
     borderRadius: 5,
-    marginBottom: 10,
+    marginRight: 10,
+    fontSize: 16,
+    color: "#333",
   },
-  buttonContainer: {
-    flexDirection: "row", 
-    justifyContent: "space-between", 
-    width: "100%", 
-    marginTop: 0,
+  searchButton: {
+    backgroundColor: "#e86a10",
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    borderRadius: 5,
+  },
+  searchButtonText: {
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 16,
+  },
+  retryButton: {
+    backgroundColor: "#e86a10",
+    margin: 20,
+    paddingVertical: 15,
+    borderRadius: 5,
+    alignItems: "center",
+  },
+  retryButtonText: {
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 16,
   },
 });

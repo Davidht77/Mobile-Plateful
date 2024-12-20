@@ -16,7 +16,7 @@ const DetailsPage = () =>{
         propietarioId: 0,
         cartaId: 0,
         calificacion_promedio: 0,
-        ubicacionId: 0,
+        direccion: "",
         latitude: 0,
         longitude: 0,
         nombre_propietario: "",
@@ -28,8 +28,8 @@ const DetailsPage = () =>{
     const [restaurante,setRestaurante] = useState<RestauranteDTO>(vacio);
     const id = searchParams.get("id"); // Accede al valor del parámetro 'id'
     const router = useRouter(); // Hook para manejar rutas
-    const roundedLatitude = parseFloat(restaurante.longitude.toFixed(6));
-    const roundedLongitude = parseFloat(restaurante.latitude.toFixed(6));
+    const roundedLatitude = parseFloat(restaurante.latitude.toFixed(6));
+    const roundedLongitude = parseFloat(restaurante.longitude.toFixed(6));
 
     const ObtenerRestaurante = async() =>{
         const response = await getRestauranteById(Number(id))
@@ -110,7 +110,7 @@ const DetailsPage = () =>{
               longitude: roundedLongitude,
             }}
             title={restaurante.nombre_restaurante}
-            description={`Ubicación de ${restaurante.nombre_restaurante}`}
+            description={restaurante.direccion}
           />
         </MapView>
       ) : (
