@@ -27,7 +27,6 @@ export async function setStorageItemAsync(key: string, value: string | null) {
 	} else if (value == null) {
 		await SecureStore.deleteItemAsync(key);
 	} else {
-		console.log("Setting storage item: ", key, value);
 		await SecureStore.setItemAsync(key, value);
 	}
 }
