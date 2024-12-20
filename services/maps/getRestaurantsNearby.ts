@@ -23,7 +23,6 @@ export async function getUbicationNearby(ubication: ubicationResquest) {
 		const response = await api.request<null,RestauranteResponse[]>(
 			options
 		);
-		console.log(response.data);
 		return response.data;
 	} catch (error) {
 		throw error;

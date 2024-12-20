@@ -14,7 +14,7 @@ export async function getUbication(ubication: string) {
 		  params : {address: ubication}
 	};
 	try {
-		const response = await api.get<null,ubicationResponse>(null,
+		const response = await api.get<null,ubicationResponse>(
 			options
 		);
 		console.log(response.data);

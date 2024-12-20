@@ -3,7 +3,6 @@ import axios, {
 	AxiosResponse,
 	RawAxiosRequestHeaders,
 } from "axios";
-import { ubicationResquest } from "../interfaces/ubication/UbicationRequest";
 
 const BACKEND_URL = "http://192.168.0.5:8080";
 

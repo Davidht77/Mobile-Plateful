@@ -30,6 +30,7 @@ const RestaurantsPage = () => {
     };
 
     fetchRestaurants();
+    console.log("Restaurantes Obtenidos")
   }, []);
 
   const paginateRestaurants = () => {
@@ -56,8 +57,8 @@ const RestaurantsPage = () => {
         data={paginateRestaurants()}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
-          <View style={styles.restaurant} className='bg-orange-400'>
-            <Link href={`/resturante/${item.id}`}>{item.nombre_restaurante}</Link>
+          <View style={styles.restaurant} className='bg-orange-400 shadow-sm rounded-lg p-4 mb-3 mx-4 border border-gray-200'>
+            <Link href={`/restaurante/${item.id}`}>{item.nombre_restaurante}</Link>
             <Text>{item.ubicacion.direccionCompleta}</Text>
           </View>
         )}
