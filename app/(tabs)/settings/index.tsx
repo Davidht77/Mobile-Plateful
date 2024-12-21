@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Button, List } from 'react-native-paper';
-import { router } from 'expo-router';
+import { router, Stack } from 'expo-router';
 import { useAuthContext } from '../../../contexts/AuthContext';
 
 const Settings = () => {
@@ -14,6 +14,7 @@ const Settings = () => {
 
   return (
     <View style={styles.container}>
+      <Stack.Screen options={{ headerShown: false }} />
       <List.Section>
         <List.Item
           title="Cambiar Nombre y Celular"
