@@ -14,6 +14,7 @@ export async function publicarComentario(comentario: CreateComentarioDTO) {
           },
     };
     try {
+        console.log(comentario);
         const response = await api.post<CreateComentarioDTO,ComentarioDTO>(
             comentario,
             options

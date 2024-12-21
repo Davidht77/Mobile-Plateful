@@ -7,6 +7,7 @@ import { ComentarioDTO } from "../../../../interfaces/comentarios/ComentarioDto"
 import { getResenasbyId } from "../../../../services/reseñas/getRestaurantebyId";
 import { publicarComentario } from "../../../../services/comentarios/postComentario";
 import { ResenaDTO } from "../../../../interfaces/reseña/ResenaDto";
+import { getOwnInformacion } from "../../../../services/auth/getOwn";
 
 const ListaComentarios = () => {
   const searchParams = useSearchParams();
@@ -28,11 +29,16 @@ const ListaComentarios = () => {
     setResena(response);
   };
 
+  const ObtenerUsuario = async () => {
+    return await getOwnInformacion();
+  }
+
   const publicarNuevoComentario = async () => {
     if (nuevoComentario.trim() === "") return;
 
     try {
-      const response = await publicarComentario({id_resena: Number(id), id_usuario: 2, contenido: nuevoComentario});
+      const id_user = (await ObtenerUsuario()).id_usuario; 
+      const response = await publicarComentario({id_resena: Number(id), id_usuario: id_user, contenido: nuevoComentario});
       setNuevoComentario(""); // Limpiar el campo de texto
       obtenerComentarios(); // Actualizar lista de comentarios
       console.log("Comentarios Obtenidos");
