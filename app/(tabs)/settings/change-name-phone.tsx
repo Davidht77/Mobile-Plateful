@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Alert, StyleSheet } from 'react-native';
 import { TextInput, Button } from 'react-native-paper';
-import { router } from 'expo-router';
+import { router, Stack } from 'expo-router';
 
 const ChangeNamePhone = () => {
   const [name, setName] = useState('');

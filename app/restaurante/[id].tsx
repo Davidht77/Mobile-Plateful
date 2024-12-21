@@ -28,11 +28,13 @@ const DetailsPage = () =>{
     const [restaurante,setRestaurante] = useState<RestauranteDTO>(vacio);
     const id = searchParams.get("id"); // Accede al valor del parámetro 'id'
     const router = useRouter(); // Hook para manejar rutas
-    const roundedLatitude = parseFloat(restaurante.latitude.toFixed(6));
-    const roundedLongitude = parseFloat(restaurante.longitude.toFixed(6));
+    const [roundedLatitude,setRLat] = useState(parseFloat(restaurante.latitude.toFixed(6)));
+    const [roundedLongitude, setRLong] = useState(parseFloat(restaurante.longitude.toFixed(6)));
 
     const ObtenerRestaurante = async() =>{
         const response = await getRestauranteById(Number(id))
+        setRLat(response.latitude);
+        setRLong(response.longitude);
         setRestaurante(response);
     }
 
@@ -56,8 +58,6 @@ const DetailsPage = () =>{
 
     useEffect(()=>{
         ObtenerRestaurante();
-        console.log(roundedLongitude); // -77.022141
-        console.log(roundedLatitude);  // -12.135205
     },[])
 
     const isValidCoordinates =
@@ -106,8 +106,8 @@ const DetailsPage = () =>{
         >
           <Marker
             coordinate={{
-              latitude: roundedLatitude,
-              longitude: roundedLongitude,
+              latitude: restaurante.latitude,
+              longitude: restaurante.longitude,
             }}
             title={restaurante.nombre_restaurante}
             description={restaurante.direccion}
@@ -130,21 +130,32 @@ const DetailsPage = () =>{
         </View>
       )}
 
-        <View className="flex-1 justify-end items-center">
+<View className="flex-1 justify-end items-center pb-5">
+      <View className="flex-row justify-between space-x-8 space-y-8">
         <TouchableOpacity
-          className="bg-orange-500 rounded-full py-3 px-6 mb-4"
-          onPress={
-            () => {
-              const route = `/restaurante/carta/${restaurante.cartaId}/${restaurante.nombre_carta}`;
-              router.push(route);
-            }
-          }
+          className="bg-orange-500 rounded-full py-3 px-6"
+          onPress={() => {
+            const route = `/restaurante/carta/${restaurante.cartaId}/${restaurante.nombre_carta}`;
+            router.push(route);
+          }}
         >
-          <Text className="text-white font-semibold text-lg">Ver Carta</Text>
+          <Text className="text-white font-semibold text-lg text-center">Ver Carta</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          className="bg-orange-500 rounded-full py-3 px-6"
+          onPress={() => {
+            const route = `/restaurante/resenas/${restaurante.id_restaurante}`;
+            router.push(route);
+          }}
+        >
+          <Text className="text-white font-semibold text-lg text-center">Ver Reseñas</Text>
         </TouchableOpacity>
       </View>
+    </View>
 
-      </View>
+
+    </View>
     );
 }
 
