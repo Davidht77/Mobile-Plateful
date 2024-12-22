@@ -2,12 +2,18 @@ import React, { useState } from 'react';
 import { View, Alert, StyleSheet } from 'react-native';
 import { TextInput, Button } from 'react-native-paper';
 import { router, Stack } from 'expo-router';
+import { getOwnInformacion } from '../../../services/auth/getOwn';
 
 const ChangeNamePhone = () => {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
 
-  const handleSaveChanges = () => {
+  const ObtenerUsuario = async () => {
+    return await getOwnInformacion();
+  };
+
+  const handleSaveChanges = async () => {
+    console.log(await ObtenerUsuario());
     Alert.alert('Cambios guardados', 'Tu nombre y contraseña han sido actualizados correctamente');
     router.push("/settings"); // Regresa a la pantalla de configuración
   };
