@@ -20,6 +20,7 @@ export default class Api {
 	public set authorization(value: string | null) {
 		this._authorization = value;
 	}
+
 	public static async getInstance() {
 		if (!this._instance) {
 			const basePath = BACKEND_URL;

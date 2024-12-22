@@ -3,10 +3,11 @@ import { View, FlatList, Text, Button, StyleSheet, ActivityIndicator } from 'rea
 import * as Location from "expo-location";
 import { getUbication } from '../../services/maps/getUbication';
 import { getUbicationNearby } from '../../services/maps/getRestaurantsNearby';
-import { useStorageState } from '../../hooks/useStorageState';
 import { ubicationResquest } from '../../interfaces/ubication/UbicationRequest';
 import { RestauranteResponse } from '../../interfaces/restaurantes/RestauranteResponse';
 import { Link, Redirect } from 'expo-router';
+import { getOwnRole } from '../../services/auth/getOwn';
+
 
 const RestaurantsPage = () => {
   const [location, setLocation] = useState<ubicationResquest>(null);
@@ -30,31 +31,14 @@ const RestaurantsPage = () => {
     };
 
     fetchRestaurants();
-    console.log("Restaurantes Obtenidos")
+
+    console.log("Restaurantes Obtenidos");
   }, []);
-
-  const paginateRestaurants = () => {
-    const startIndex = (currentPage - 1) * restaurantsPerPage;
-    const endIndex = startIndex + restaurantsPerPage;
-    return restaurants.slice(startIndex, endIndex);
-  };
-
-  const handleNextPage = () => {
-    if ((currentPage * restaurantsPerPage) < restaurants.length) {
-      setCurrentPage(currentPage + 1);
-    }
-  };
-
-  const handlePrevPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-    }
-  };
 
   return (
     <View style={styles.container}>
       <FlatList
-        data={paginateRestaurants()}
+        data={restaurants}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
           <View style={styles.restaurant} className='bg-orange-400 shadow-sm rounded-lg p-4 mb-3 mx-4 border border-gray-200'>
@@ -64,19 +48,6 @@ const RestaurantsPage = () => {
           </View>
         )}
       />
-      <View style={styles.pagination}>
-        <Button
-          title="Anterior"
-          onPress={handlePrevPage}
-          disabled={currentPage === 1}
-        />
-        <Text>Página {currentPage}</Text>
-        <Button
-          title="Siguiente"
-          onPress={handleNextPage}
-          disabled={(currentPage * restaurantsPerPage) >= restaurants.length}
-        />
-      </View>
     </View>
   );
 };

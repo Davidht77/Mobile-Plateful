@@ -1,8 +1,6 @@
 import { AxiosRequestConfig } from "axios";
 import * as SecureStore from "expo-secure-store";
 import Api from "../api";
-import { PlatoDto } from "../../interfaces/plato/PlatoDto";
-import { ResenaDTO } from "../../interfaces/reseña/ResenaDto";
 import { UsuarioDto } from "../../interfaces/auth/UsuarioDto";
 
 export async function getOwnInformacion() {
@@ -19,8 +17,14 @@ export async function getOwnInformacion() {
         const response = await api.get<null,UsuarioDto>(
             options
         );
+        console.log(response.data.role)
         return response.data;
     } catch (error) {
         throw error;
     }
+}
+
+export const getOwnRole = async () =>{
+    const response = await getOwnInformacion();
+    return response.role;
 }

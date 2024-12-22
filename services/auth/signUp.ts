@@ -17,6 +17,7 @@ export async function signup(signupRequest: RegisterRequest) {
 			signupRequest,
 			options
 		);
+		api.authorization = response.data.token;
 		console.log(response.data.role);
 		return response.data;
 	} catch (error) {

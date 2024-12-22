@@ -11,12 +11,17 @@ import { Text } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location";
 import { getUbication } from "../../../services/maps/getUbication";
+import { getOwnInformacion, getOwnRole } from "../../../services/auth/getOwn";
 
 export default function UserLocationMap() {
   const [location, setLocation] = useState(null); // Estado para la ubicación
   const [loading, setLoading] = useState(true); // Estado de carga
   const [search, setSearch] = useState(""); // Estado para la búsqueda manual
   const [nombre_lugar, setLugar] = useState("");
+
+  const ObtenerUsuario = async () => {
+      return await getOwnInformacion();
+  }
 
   useEffect(() => {
     getUserLocation();

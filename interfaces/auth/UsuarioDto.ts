@@ -3,4 +3,5 @@ export interface UsuarioDto{
     nombre: string;
     correo: string;
     telefono: string;
+    role: string;
 }
