@@ -2,6 +2,7 @@ import { AxiosRequestConfig } from "axios";
 import * as SecureStore from "expo-secure-store";
 import Api from "../api";
 import { RestauranteDTO } from "../../interfaces/restaurantes/RestauranteDto";
+import { RestauranteResponse } from "../../interfaces/restaurantes/RestauranteResponse";
 
 export async function getRestauranteByOwner(id: number) {
     const api = await Api.getInstance();
@@ -14,7 +15,7 @@ export async function getRestauranteByOwner(id: number) {
     };
 
     try {
-        const response = await api.get<null,RestauranteDTO[]>(
+        const response = await api.get<null,RestauranteResponse[]>(
             options
         );
         return response.data;
