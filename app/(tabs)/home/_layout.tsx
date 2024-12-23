@@ -4,6 +4,7 @@ const StackLayout = () =>{
     return(
     <Stack>
         <Stack.Screen name="index" options={{headerTitle: "Home Screen"}}/>
+        <Stack.Screen name="create-restaurant" options={{headerShown: false}}/>
     </Stack>
     );
 };
