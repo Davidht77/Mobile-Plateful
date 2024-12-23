@@ -7,6 +7,7 @@ import {
   TextInput,
   TouchableOpacity,
   FlatList,
+  RefreshControl,
 } from "react-native";
 import { Text } from "react-native";
 import MapView, { Marker } from "react-native-maps";
@@ -14,8 +15,9 @@ import * as Location from "expo-location";
 import { getUbication } from "../../../services/maps/getUbication";
 import { getOwnInformacion, getOwnRole } from "../../../services/auth/getOwn";
 import { getRestauranteByOwner } from "../../../services/restaurante/getOwnRestaurantes";
-import { Stack, useRouter } from "expo-router";
+import { Link, Stack, useRouter } from "expo-router";
 import { RestauranteDTO } from "../../../interfaces/restaurantes/RestauranteDto";
+import { RestauranteResponse } from "../../../interfaces/restaurantes/RestauranteResponse";
 
 export default function UserLocationMap() {
   const [location, setLocation] = useState(null);
@@ -23,22 +25,28 @@ export default function UserLocationMap() {
   const [role, setRole] = useState(""); // Estado para el rol
   const [search, setSearch] = useState("");
   const [nombre_lugar, setLugar] = useState("");
-  const [restaurants, setRestaurants] = useState<RestauranteDTO[]>([]); // Estado para los restaurantes
+  const [restaurants, setRestaurants] = useState<RestauranteResponse[]>([]); // Estado para los restaurantes
   const router = useRouter();
+  const [refreshing, setRefreshing] = useState(false); // Estado para el refresh
+
 
   const fetchRoleAndData = async () => {
+    setRefreshing(true);
     try {
       const user = await getOwnInformacion();
       const userRole = user.role;
        // Obtiene el rol del usuario
       setRole(userRole);
 
-      if (userRole === "Propietario") {
+      if (userRole === "ROLE_PROPIETARIO") {
         const propietarioRestaurants = await getRestauranteByOwner(Number(user.id_usuario))
         setRestaurants(propietarioRestaurants);
       }
     } catch (error) {
-      Alert.alert("Error", "No se pudo obtener el rol del usuario.");
+      Alert.alert("Error", "No se pudo obtener los restaurantes");
+    }
+    finally {
+      setRefreshing(false);
     }
   };
 
@@ -159,26 +167,29 @@ export default function UserLocationMap() {
     return (
       <View style={styles.container}>
         <Stack.Screen options={{headerTitle: "Tus Restaurantes"}}/>       
-        {restaurants.length === 0 ? (
-          // Mostrar mensaje si no hay restaurantes
-          <View style={styles.emptyContainer}>
-            <Text style={styles.emptyText}>
-              No tienes restaurantes creados aún.
-            </Text>
+        <FlatList
+        data={restaurants}
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={({ item }) => (
+          <View style={styles.restaurantItem}>
+            <Link href={`/restaurante/${item.id}`} style={styles.restaurantName}>{item.nombre_restaurante}</Link>
+            <Text style={styles.restaurantAddress}>{item.tipoRestaurante}</Text>
+            <Text style={styles.restaurantAddress}>{item.ubicacion.direccionCompleta}</Text>
           </View>
-        ) : (
-          // Mostrar la lista de restaurantes si existen
-          <FlatList
-            data={restaurants}
-            keyExtractor={(item) => item.id_restaurante.toString()}
-            renderItem={({ item }) => (
-              <View style={styles.restaurantItem}>
-                <Text style={styles.restaurantName}>{item.nombre_restaurante}</Text>
-                <Text style={styles.restaurantAddress}>{item.direccion}</Text>
-              </View>
-            )}
-          />
         )}
+        ListEmptyComponent={
+          <View style={styles.emptyContainer}>
+            <Text style={styles.emptyText}>No tienes restaurantes creados aún.</Text>
+          </View>
+        }
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={fetchRoleAndData}
+            colors={["#e86a10"]}
+          />
+        }
+      />
   
         {/* Botón siempre visible */}
         <TouchableOpacity

@@ -21,7 +21,9 @@ export default function CreateRestaurantScreen() {
       nombre_restaurante: nombre, horario: horario, tipoRestaurante: tipoRestaurante, email: email, direccion: direccion};
     await publicarRestaurante(restaurante);
     Alert.alert("Éxito", `Restaurante "${nombre}" creado correctamente.`);
-    router.push("/settings");
+    if(router.canGoBack()){
+        router.back();
+    }
   };
 
   return (
