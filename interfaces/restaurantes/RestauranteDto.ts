@@ -12,4 +12,11 @@ export interface RestauranteDTO {
     latitude: number;
     longitude: number;
   }
-  
+
+export interface CreateRestauranteDTO {
+      nombre_restaurante: string;
+      horario: string;
+      tipoRestaurante: string;
+      email: string;
+      direccion: string;
+}
