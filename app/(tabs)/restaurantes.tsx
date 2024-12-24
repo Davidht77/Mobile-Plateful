@@ -5,7 +5,7 @@ import { getUbication } from '../../services/maps/getUbication';
 import { getUbicationNearby } from '../../services/maps/getRestaurantsNearby';
 import { ubicationResquest } from '../../interfaces/ubication/UbicationRequest';
 import { RestauranteResponse } from '../../interfaces/restaurantes/RestauranteResponse';
-import { Link, Redirect } from 'expo-router';
+import { Link, Redirect, Stack } from 'expo-router';
 import { getOwnRole } from '../../services/auth/getOwn';
 
 
@@ -37,6 +37,7 @@ const RestaurantsPage = () => {
 
   return (
     <View style={styles.container}>
+      <Stack.Screen options={{headerTitle: "Restaurantes Cercanos"}}/>       
       <FlatList
         data={restaurants}
         keyExtractor={(item) => item.id.toString()}
