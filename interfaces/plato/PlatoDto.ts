@@ -5,3 +5,10 @@ export interface PlatoDto{
       disponibilidad: boolean;
       id_carta: number;
 }
+
+export interface CreatePlatoDto{
+      nombre: string;
+      precio: number;
+      disponibilidad: boolean;
+      id_carta: number;
+}

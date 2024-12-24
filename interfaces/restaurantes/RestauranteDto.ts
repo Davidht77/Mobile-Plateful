@@ -17,6 +17,5 @@ export interface CreateRestauranteDTO {
       nombre_restaurante: string;
       horario: string;
       tipoRestaurante: string;
-      email: string;
       direccion: string;
 }

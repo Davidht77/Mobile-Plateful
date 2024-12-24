@@ -3,23 +3,25 @@ import React, { useState } from "react";
 import { View, StyleSheet, TextInput, TouchableOpacity, Alert, Text } from "react-native";
 import { publicarRestaurante } from "../../../services/restaurante/postRestaurante";
 import { CreateRestauranteDTO } from "../../../interfaces/restaurantes/RestauranteDto";
+import { createCarta } from "../../../services/carta/createCarta";
 
 export default function CreateRestaurantScreen() {
   const [nombre, setNombre] = useState("");
   const [horario, setHorario] = useState("");
   const [tipoRestaurante, setTipoRestaurante] = useState("");
-  const [email, setEmail] = useState("");
+  const [carta, setCarta] = useState("");
   const [direccion, setDireccion] = useState("");
   const router = useRouter();
 
   const handleCreateRestaurant = async () => {
-    if (!nombre || !horario || !tipoRestaurante || !email || !direccion) {
+    if (!nombre || !horario || !tipoRestaurante || !carta || !direccion) {
       Alert.alert("Error", "Todos los campos son obligatorios.");
       return;
     }
     const restaurante : CreateRestauranteDTO = {
-      nombre_restaurante: nombre, horario: horario, tipoRestaurante: tipoRestaurante, email: email, direccion: direccion};
-    await publicarRestaurante(restaurante);
+      nombre_restaurante: nombre, horario: horario, tipoRestaurante: tipoRestaurante, direccion: direccion};
+    const response = await publicarRestaurante(restaurante);
+    await createCarta({nombre: carta, restauranteId: response.id_restaurante});
     Alert.alert("Éxito", `Restaurante "${nombre}" creado correctamente.`);
     if(router.canGoBack()){
         router.back();
@@ -49,15 +51,15 @@ export default function CreateRestaurantScreen() {
       />
       <TextInput
         style={styles.input}
-        placeholder="Email"
-        value={email}
-        onChangeText={setEmail}
-      />
-      <TextInput
-        style={styles.input}
         placeholder="Dirección"
         value={direccion}
         onChangeText={setDireccion}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Nombre de la Carta"
+        value={carta}
+        onChangeText={setCarta}
       />
       <TouchableOpacity style={styles.createButton} onPress={handleCreateRestaurant}>
         <Text style={styles.createButtonText}>Crear</Text>
