@@ -17,6 +17,7 @@ const ListaComentarios = () => {
   const [comentarios, setComentarios] = useState<ComentarioDTO[]>([]);
   const [resena, setResena] = useState<ResenaDTO>(null);
   const [nuevoComentario, setNuevoComentario] = useState("");
+  const [role, setRole] = useState<string | null>(null);
 
   // Funciones para obtener datos
   const obtenerComentarios = async () => {
@@ -30,7 +31,9 @@ const ListaComentarios = () => {
   };
 
   const ObtenerUsuario = async () => {
-    return await getOwnInformacion();
+    const response = await getOwnInformacion();
+    setRole(response.role);
+    return response;
   }
 
   const publicarNuevoComentario = async () => {
@@ -38,7 +41,7 @@ const ListaComentarios = () => {
 
     try {
       const id_user = (await ObtenerUsuario()).id_usuario; 
-      const response = await publicarComentario({id_resena: Number(id), id_usuario: id_user, contenido: nuevoComentario});
+      await publicarComentario({id_resena: Number(id), id_usuario: id_user, contenido: nuevoComentario});
       setNuevoComentario(""); // Limpiar el campo de texto
       obtenerComentarios(); // Actualizar lista de comentarios
       console.log("Comentarios Obtenidos");
@@ -54,13 +57,12 @@ const ListaComentarios = () => {
 
   return (
     <View className="flex-1 bg-gray-100">
-      <Stack.Screen options={{ headerTitle: `Comentarios` }} />
+      <Stack.Screen options={{ headerTitle: `Reseña` }} />
 
       {resena && (
-        <View className="bg-white shadow-sm rounded-lg p-4 mb-3 mx-4 border border-gray-200">
-          <Text className="text-xl font-bold text-gray-800 mb-2">{resena.id_resena}</Text>
-          <Text className="text-base text-gray-700">{resena.contenido}</Text>
-          <Text className="text-sm text-gray-600 mt-2">Por: {resena.nombre_usuario}</Text>
+        <View className="bg-white shadow-sm rounded-lg p-4 mb-3 mt-3 mx-4 border border-gray-200">
+          <Text className="text-xl font-bold text-gray-800 mb-2">{resena.contenido}</Text>
+          <Text className="text-sm text-gray-600 mt-2">Escrito por: {resena.nombre_usuario}</Text>
           <Text className="text-sm text-gray-600">Fecha: {resena.fecha}</Text>
         </View>
       )}
@@ -79,6 +81,7 @@ const ListaComentarios = () => {
       />
 
       {/* Barra para publicar comentarios */}
+      { role == "ROLE_CLIENTE" && (
       <View className="bg-white p-4 border-t border-gray-200 flex-row items-center">
         <TextInput
           value={nuevoComentario}
@@ -93,6 +96,7 @@ const ListaComentarios = () => {
           <Text className="text-white font-bold">Publicar</Text>
         </TouchableOpacity>
       </View>
+      )}
     </View>
   );
 };

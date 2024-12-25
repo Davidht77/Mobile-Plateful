@@ -26,6 +26,7 @@ const ListaReseñas = () => {
   const [nuevaReseña, setNuevaReseña] = useState("");
   const [rating, setRating] = useState(0);
   const [isWritingResena, setIsWritingResena] = useState(false); // Estado para mostrar u ocultar el formulario
+  const [role, setRole] = useState<string | null>(null);
 
   const ObtenerReseñas = async () => {
     const response = await getResenasbyRestaurante(Number(id));
@@ -33,7 +34,9 @@ const ListaReseñas = () => {
   };
 
   const ObtenerUsuario = async () => {
-    return await getOwnInformacion();
+    const response = await getOwnInformacion();
+    setRole(response.role);
+    return response;
   };
 
   const publicarNuevaResena = async () => {
@@ -48,7 +51,7 @@ const ListaReseñas = () => {
         id_restaurante: Number(id),
         id_usuario: id_user,
         contenido: nuevaReseña,
-        calificacion: Math.round(rating),
+        calificacion: Math.floor(rating),
       });
       setNuevaReseña(""); // Limpiar el campo de texto
       setRating(0); // Restablecer la calificación
@@ -73,7 +76,7 @@ const ListaReseñas = () => {
       <Stack.Screen options={{ headerTitle: `Lista de Reseñas` }} />
 
         {/* Botón para mostrar formulario */}
-        {!isWritingResena && (
+        {!isWritingResena && role == "ROLE_CLIENTE" && (
           <TouchableOpacity
             onPress={() => setIsWritingResena(true)}
             className="bg-orange-500 rounded-lg p-4 mb-4"
