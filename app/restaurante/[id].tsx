@@ -1,10 +1,11 @@
-import { router, Stack, useFocusEffect } from "expo-router";
+import { Link, router, Stack, useFocusEffect } from "expo-router";
 import { useRouter, useSearchParams } from "expo-router/build/hooks"
 import { useCallback, useEffect, useState } from "react";
 import { View, Text, BackHandler, TouchableOpacity } from "react-native";
 import { getRestauranteById } from "../../services/restaurante/getRestaurante";
 import { RestauranteDTO } from "../../interfaces/restaurantes/RestauranteDto";
 import MapView, { Marker } from "react-native-maps";
+import { getOwnInformacion } from "../../services/auth/getOwn";
 
 
 const DetailsPage = () =>{
@@ -30,13 +31,19 @@ const DetailsPage = () =>{
     const router = useRouter(); // Hook para manejar rutas
     const [roundedLatitude,setRLat] = useState(parseFloat(restaurante.latitude.toFixed(6)));
     const [roundedLongitude, setRLong] = useState(parseFloat(restaurante.longitude.toFixed(6)));
+    const [role, setRole] = useState<string | null>(null);
 
     const ObtenerRestaurante = async() =>{
-        const response = await getRestauranteById(Number(id))
+        const response = await getRestauranteById(Number(id));
         setRLat(response.latitude);
         setRLong(response.longitude);
         setRestaurante(response);
     }
+
+      const ObtenerUsuario = async () => {
+        setRole((await getOwnInformacion()).role);
+      };
+    
 
     // Hook para interceptar el botón de retroceso
   useFocusEffect(
@@ -58,6 +65,7 @@ const DetailsPage = () =>{
 
     useEffect(()=>{
         ObtenerRestaurante();
+        ObtenerUsuario();
     },[])
 
     const isValidCoordinates =
@@ -88,6 +96,9 @@ const DetailsPage = () =>{
 
           <Text className="text-sm font-medium text-gray-500">Calificación Promedio:</Text>
           <Text className="text-lg text-gray-700">{restaurante.calificacion_promedio}</Text>
+
+          <Link href={`/restaurante/edit/${restaurante.id_restaurante}`} className='text-lg text-gray-500 mt-3'>Editar Información</Link>
+          
 
         </View>
       </View>
@@ -130,7 +141,7 @@ const DetailsPage = () =>{
         </View>
       )}
 
-<View className="flex-1 justify-end items-center pb-5">
+    <View className="flex-1 justify-end items-center pb-5">
       <View className="flex-row justify-between space-x-8 space-y-8">
         <TouchableOpacity
           className="bg-orange-500 rounded-full py-3 px-6"
