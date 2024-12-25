@@ -97,4 +97,17 @@ export default class Api {
 
 		return this.request<RequestBodyType, ResponseBodyType>(configOptions);
 	}
+
+	public patch<RequestBodyType, ResponseBodyType>(
+		data: RequestBodyType,
+		options: AxiosRequestConfig
+	) {
+		const configOptions: AxiosRequestConfig = {
+			...options,
+			method: "PATCH",
+			data,
+		};
+
+		return this.request<RequestBodyType, ResponseBodyType>(configOptions);
+	}
 }

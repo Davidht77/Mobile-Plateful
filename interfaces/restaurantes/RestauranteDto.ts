@@ -19,3 +19,11 @@ export interface CreateRestauranteDTO {
       tipoRestaurante: string;
       direccion: string;
 }
+
+export interface EditRestauranteDTO {
+  nombre_restaurante: string;
+  nombre_carta: string;
+  horario: string;
+  tipoRestaurante: string;
+  direccion: string;
+}

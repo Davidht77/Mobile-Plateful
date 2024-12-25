@@ -50,7 +50,8 @@ const DetailsPage = () =>{
     useCallback(() => {
       const onBackPress = () => {
         // Redirige a la pantalla de restaurantes.tsx
-        router.replace("/restaurantes");
+        if(role == "ROLE_PROPIETARIO"){router.replace("/home")}
+        else{ router.replace("/restaurantes");}
         return true; // Bloquea la acción de retroceso predeterminada
       };
 
@@ -97,7 +98,10 @@ const DetailsPage = () =>{
           <Text className="text-sm font-medium text-gray-500">Calificación Promedio:</Text>
           <Text className="text-lg text-gray-700">{restaurante.calificacion_promedio}</Text>
 
-          <Link href={`/restaurante/edit/${restaurante.id_restaurante}`} className='text-lg text-gray-500 mt-3'>Editar Información</Link>
+          <Text></Text>
+          {role == "ROLE_PROPIETARIO" &&(
+            <Link href={`/restaurante/edit/${restaurante.id_restaurante}`} className='text-lg text-gray-500'>Editar Información</Link>
+          )}
           
 
         </View>
