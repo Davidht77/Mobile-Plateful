@@ -11,6 +11,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
+  StyleSheet,
 } from "react-native";
 import { Link, Stack } from "expo-router";
 import { getOwnInformacion } from "../../../services/auth/getOwn";
@@ -142,9 +143,29 @@ const ListaReseñas = () => {
               <Text>Fecha: {item.fecha}</Text>
             </View>
           )}
+          ListEmptyComponent={
+              <View style={styles.emptyContainer}>
+                <Text style={styles.emptyText}>Este restaurante no tiene reseñas creadas aún.</Text>
+              </View>
+          }
         />
     </KeyboardAvoidingView>
   );
 };
 
+const styles = StyleSheet.create({
+  emptyContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 20,
+  },
+  emptyText: {
+    fontSize: 16,
+    color: "#666",
+    marginBottom: 20,
+    textAlign: "center",
+  }
+}
+)
 export default ListaReseñas;

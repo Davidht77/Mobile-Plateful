@@ -1,4 +1,4 @@
-import { View, Text, FlatList, Button, Modal, TextInput, TouchableOpacity, Alert } from "react-native";
+import { View, Text, FlatList, Button, Modal, TextInput, TouchableOpacity, Alert, StyleSheet } from "react-native";
 import { useSearchParams } from "expo-router/build/hooks";
 import { Stack, useRouter } from 'expo-router';
 import { useEffect, useState } from "react";
@@ -109,6 +109,11 @@ export default function Carta() {
           </View>
         )}
         contentContainerStyle={{ paddingTop: 16, paddingBottom: 16 }}
+        ListEmptyComponent={
+          <View style={styles.emptyContainer}>
+            <Text style={styles.emptyText}>Este restaurante no tiene platos aún.</Text>
+          </View>
+        }
       />
       {role === "ROLE_PROPIETARIO" && (
         <TouchableOpacity
@@ -155,3 +160,19 @@ export default function Carta() {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  emptyContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 20,
+  },
+  emptyText: {
+    fontSize: 16,
+    color: "#666",
+    marginBottom: 20,
+    textAlign: "center",
+  }
+}
+)

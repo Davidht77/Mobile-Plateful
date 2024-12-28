@@ -21,7 +21,8 @@ export default function CreateRestaurantScreen() {
     const restaurante : CreateRestauranteDTO = {
       nombre_restaurante: nombre, horario: horario, tipoRestaurante: tipoRestaurante, direccion: direccion};
     const response = await publicarRestaurante(restaurante);
-    await createCarta({nombre: carta, restauranteId: response.id_restaurante});
+    console.log(response.id);
+    await createCarta({nombre: carta, restauranteId: response.id});
     Alert.alert("Éxito", `Restaurante "${nombre}" creado correctamente.`);
     if(router.canGoBack()){
         router.back();
