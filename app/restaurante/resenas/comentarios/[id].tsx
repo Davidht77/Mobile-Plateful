@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "expo-router/build/hooks";
-import { View, Text, TextInput, TouchableOpacity, FlatList } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet } from "react-native";
 import { Stack } from "expo-router";
 import { getComentariosbyResena } from "../../../../services/comentarios/getComentariosbyReseña";
 import { ComentarioDTO } from "../../../../interfaces/comentarios/ComentarioDto";
@@ -78,6 +78,12 @@ const ListaComentarios = () => {
           </View>
         )}
         contentContainerStyle={{ paddingTop: 16, paddingBottom: 16 }}
+        ListEmptyComponent={
+            <View style={styles.emptyContainer}>
+              <Text style={styles.emptyText}>Esta reseña no tiene comentarios creados aún.</Text>
+            </View>
+        }
+        
       />
 
       {/* Barra para publicar comentarios */}
@@ -100,5 +106,21 @@ const ListaComentarios = () => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  emptyContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 20,
+  },
+  emptyText: {
+    fontSize: 16,
+    color: "#666",
+    marginBottom: 20,
+    textAlign: "center",
+  }
+}
+)
 
 export default ListaComentarios;

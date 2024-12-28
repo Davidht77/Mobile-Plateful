@@ -2,6 +2,7 @@ import { AxiosRequestConfig } from "axios";
 import Api from "../api";
 import * as SecureStore from "expo-secure-store";
 import { CreateRestauranteDTO, RestauranteDTO } from "../../interfaces/restaurantes/RestauranteDto";
+import { RestauranteResponse } from "../../interfaces/restaurantes/RestauranteResponse";
 
 export async function publicarRestaurante(restaurante: CreateRestauranteDTO) {
     const api = await Api.getInstance();
@@ -13,7 +14,7 @@ export async function publicarRestaurante(restaurante: CreateRestauranteDTO) {
           },
     };
     try {
-        const response = await api.post<CreateRestauranteDTO,RestauranteDTO>(
+        const response = await api.post<CreateRestauranteDTO,RestauranteResponse>(
             restaurante,
             options
         );
