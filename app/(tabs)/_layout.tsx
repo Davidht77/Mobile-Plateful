@@ -15,6 +15,8 @@ export default () => {
                 iconName = focused ? "restaurant" : "restaurant-outline";
               } else if (route.name === "settings") {
                 iconName = focused ? "settings" : "settings-outline";
+              } else if (route.name === "search_bar"){
+                iconName = focused ? "search": "search-outline"
               }
   
               // Retorna el ícono correspondiente
@@ -25,9 +27,9 @@ export default () => {
           })}
         >
             <Tabs.Screen name="home" options={{headerShown: false, tabBarLabel: "Home"}}/>
-            <Tabs.Screen name="restaurantes" options={{headerTitle: "Restaurantes", tabBarLabel: "Restaurants"}}/>
-            <Tabs.Screen name="settings" options={{headerTitle: "Settings", tabBarLabel: "Settings", headerShown: false}}/>
             <Tabs.Screen name="search_bar" options={{headerTitle: "Settings", tabBarLabel: "Search", headerShown: false}}/>
+            <Tabs.Screen name="restaurantes" options={{tabBarLabel: "Restaurants"}}/>
+            <Tabs.Screen name="settings" options={{headerTitle: "Settings", tabBarLabel: "Settings", headerShown: false}}/>
         </Tabs>
     );
 };
