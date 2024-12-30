@@ -27,6 +27,7 @@ export default () => {
             <Tabs.Screen name="home" options={{headerShown: false, tabBarLabel: "Home"}}/>
             <Tabs.Screen name="restaurantes" options={{headerTitle: "Restaurantes", tabBarLabel: "Restaurants"}}/>
             <Tabs.Screen name="settings" options={{headerTitle: "Settings", tabBarLabel: "Settings", headerShown: false}}/>
+            <Tabs.Screen name="search_bar" options={{headerTitle: "Settings", tabBarLabel: "Search", headerShown: false}}/>
         </Tabs>
     );
 };
