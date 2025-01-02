@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Alert } from 'react-native';
 import { Avatar, IconButton, Button } from 'react-native-paper';
+import AsyncStorage from '@react-native-async-storage/async-storage'; // Importar AsyncStorage
 import {
   launchCameraAsync,
   useCameraPermissions,
@@ -54,9 +55,20 @@ const ChangePhoto = () => {
     }
   };
 
-  const handleSavePhoto = () => {
-    Alert.alert('Foto Actualizada', 'Tu foto de perfil ha sido actualizada.');
-    router.push("/settings");
+  const handleSavePhoto = async () => {
+    try {
+      if (profileImage) {
+        // Guardar la URI en AsyncStorage
+        await AsyncStorage.setItem('profileImage', profileImage);
+        Alert.alert('Foto Actualizada', 'Tu foto de perfil ha sido actualizada.');
+        router.push("/settings");
+      } else {
+        Alert.alert('Error', 'Por favor selecciona una foto antes de guardar.');
+      }
+    } catch (error) {
+      console.error('Error al guardar la foto en caché:', error);
+      Alert.alert('Error', 'Ocurrió un problema al guardar tu foto.');
+    }
   };
 
   return (

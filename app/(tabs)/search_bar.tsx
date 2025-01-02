@@ -3,6 +3,7 @@ import { SearchBar } from '@rneui/themed';
 import { View, FlatList, Text, ActivityIndicator, StyleSheet } from 'react-native';
 import axios from 'axios';
 import { getRestauranteByTipo } from '../../services/busqueda/searchTipo';
+import { getRestauranteByNombre } from '../../services/busqueda/searchNombre';
 
 const Busqueda = () => {
   const [search, setSearch] = useState('');
@@ -19,17 +20,27 @@ const Busqueda = () => {
   };
 
   const fetchRestaurants = async () => {
-    if (loading || !hasMore) return;
-
+    if (loading || !hasMore || search.trim() === "") { setRestaurants([]);return;};
+  
     setLoading(true);
-
+  
     try {
-      const response = await getRestauranteByTipo( search, page);
-
-      if (response.length > 0) {
-        setRestaurants((prev) => [...prev, ...response]);
+      // Realizar ambos requests en paralelo
+      const [responseByTipo, responseByNombre] = await Promise.all([
+        getRestauranteByTipo(search, page),
+        getRestauranteByNombre(search, page),
+      ]);
+  
+      // Combinar los resultados y eliminar duplicados
+      const combinedResults = [...responseByTipo, ...responseByNombre];
+      const uniqueResults = Array.from(
+        new Map(combinedResults.map((item) => [item.id, item])).values()
+      );
+  
+      if (uniqueResults.length > 0) {
+        setRestaurants((prev) => [...prev, ...uniqueResults]);
       } else {
-        setHasMore(false); // No more data
+        setHasMore(false); // Detener la carga si no hay más resultados
       }
     } catch (error) {
       console.error('Error fetching restaurants:', error);
