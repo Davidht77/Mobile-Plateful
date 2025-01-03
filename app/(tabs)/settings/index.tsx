@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { Avatar, Button, List } from 'react-native-paper';
-import AsyncStorage from '@react-native-async-storage/async-storage'; // Importar AsyncStorage
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { router, Stack } from 'expo-router';
 import { useAuthContext } from '../../../contexts/AuthContext';
+import axios from 'axios';
 
 const Settings = () => {
   const { logout } = useAuthContext();
   const [profileImage, setProfileImage] = useState<string | undefined>(undefined);
+  const [userData, setUserData] = useState<{ name: string; email: string } | null>(null);
 
   const handleLogout = () => {
     logout();
@@ -16,7 +18,6 @@ const Settings = () => {
 
   const fetchProfileImage = async () => {
     try {
-      // Recuperar la URI desde AsyncStorage
       const savedImage = await AsyncStorage.getItem('profileImage');
       if (savedImage) {
         setProfileImage(savedImage);
@@ -26,19 +27,43 @@ const Settings = () => {
     }
   };
 
+  const fetchUserData = async () => {
+    try {
+      const response = await axios.get('/me'); // Llama al endpoint para obtener los datos del usuario
+      setUserData(response.data);
+    } catch (error) {
+      console.error('Error al cargar los datos del usuario:', error);
+    }
+  };
+
   useEffect(() => {
     fetchProfileImage();
+    fetchUserData();
   }, []);
 
   return (
     <View style={styles.container}>
       <Stack.Screen options={{ headerShown: false }} />
+      
+      {/* Tu perfil */}
+      <Text style={styles.header}>Tu perfil</Text>
+      
+      {/* Imagen de perfil */}
       <View style={styles.avatarContainer}>
         <Avatar.Image
           size={150}
           source={profileImage ? { uri: profileImage } : require('../../../assets/images/ftppordefectopng.png')}
         />
+        
+        {/* Nombre y correo */}
+        {userData && (
+          <View style={styles.userInfo}>
+            <Text style={styles.userName}>{userData.name}</Text>
+            <Text style={styles.userEmail}>{userData.email}</Text>
+          </View>
+        )}
       </View>
+
       <List.Section>
         <List.Item
           title="Cambiar Nombre y Celular"
@@ -53,6 +78,7 @@ const Settings = () => {
           onPress={() => router.push("/settings/change-photo")}
         />
       </List.Section>
+
       <Button mode="outlined" onPress={handleLogout} style={styles.logoutButton}>
         Cerrar sesión
       </Button>
@@ -66,9 +92,27 @@ const styles = StyleSheet.create({
     padding: 20,
     justifyContent: 'flex-start',
   },
+  header: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 20,
+    textAlign: 'center',
+  },
   avatarContainer: {
     alignItems: 'center',
     marginBottom: 20,
+  },
+  userInfo: {
+    marginTop: 10,
+    alignItems: 'center',
+  },
+  userName: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  userEmail: {
+    fontSize: 16,
+    color: '#666',
   },
   logoutButton: {
     marginTop: 20,
