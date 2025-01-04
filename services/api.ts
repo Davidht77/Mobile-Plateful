@@ -4,7 +4,7 @@ import axios, {
 	RawAxiosRequestHeaders,
 } from "axios";
 
-const BACKEND_URL = "http://192.168.0.5:8080";
+const BACKEND_URL = "http://192.168.0.28:8080";
 
 
 export default class Api {

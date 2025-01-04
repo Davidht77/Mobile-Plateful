@@ -5,11 +5,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { router, Stack } from 'expo-router';
 import { useAuthContext } from '../../../contexts/AuthContext';
 import axios from 'axios';
+import { getOwnInformacion } from '../../../services/auth/getOwn';
+import { UsuarioDto } from '../../../interfaces/auth/UsuarioDto';
 
 const Settings = () => {
   const { logout } = useAuthContext();
   const [profileImage, setProfileImage] = useState<string | undefined>(undefined);
-  const [userData, setUserData] = useState<{ name: string; email: string } | null>(null);
+  const [userData, setUserData] = useState<UsuarioDto | null>(null);
 
   const handleLogout = () => {
     logout();
@@ -29,8 +31,8 @@ const Settings = () => {
 
   const fetchUserData = async () => {
     try {
-      const response = await axios.get('/me'); // Llama al endpoint para obtener los datos del usuario
-      setUserData(response.data);
+      const response = await getOwnInformacion(); // Llama al endpoint para obtener los datos del usuario
+      setUserData(response);
     } catch (error) {
       console.error('Error al cargar los datos del usuario:', error);
     }
@@ -55,11 +57,10 @@ const Settings = () => {
           source={profileImage ? { uri: profileImage } : require('../../../assets/images/ftppordefectopng.png')}
         />
         
-        {/* Nombre y correo */}
         {userData && (
           <View style={styles.userInfo}>
-            <Text style={styles.userName}>{userData.name}</Text>
-            <Text style={styles.userEmail}>{userData.email}</Text>
+            <Text style={styles.userName}>{userData.nombre}</Text>
+            <Text style={styles.userEmail}>{userData.correo}</Text>
           </View>
         )}
       </View>

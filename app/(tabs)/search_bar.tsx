@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { SearchBar } from '@rneui/themed';
 import { View, FlatList, Text, ActivityIndicator, StyleSheet } from 'react-native';
-import axios from 'axios';
 import { getRestauranteByTipo } from '../../services/busqueda/searchTipo';
 import { getRestauranteByNombre } from '../../services/busqueda/searchNombre';
+import { RestauranteResponse } from '../../interfaces/restaurantes/RestauranteResponse';
 
 const Busqueda = () => {
   const [search, setSearch] = useState('');
-  const [restaurants, setRestaurants] = useState([]);
+  const [restaurants, setRestaurants] = useState<RestauranteResponse[]>([]);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
@@ -80,6 +80,7 @@ const Busqueda = () => {
         renderItem={({ item }) => (
           <View style={styles.restaurantCard}>
             <Text style={styles.restaurantName}>{item.nombre_restaurante}</Text>
+            <Text style={styles.restaurantDetails}>Tipo: {item.tipoRestaurante}</Text>
             <Text style={styles.restaurantDetails}>{item.ubicacion.direccionCompleta}</Text>
           </View>
         )}
